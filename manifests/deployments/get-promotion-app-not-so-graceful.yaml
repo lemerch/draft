@@ -17,6 +17,10 @@ spec:
           image: cr.yandex/OMITTED/draft-app:latest
           ports:
             - containerPort: 8080
+          lifecycle:
+            preStop:
+              exec:
+                command: ['/bin/sh', '-c', 'sleep 1']
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
