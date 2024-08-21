@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: get-promotion-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: get-promotion-app
+  template:
+    metadata:
+      labels:
+        app: get-promotion-app
+    spec:
+      containers:
+        - name: get-promotion-app
+          image: cr.yandex/OMITTED/draft-app:latest
+          ports:
+            - containerPort: 8080
+          lifecycle:
+            preStop:
+              exec:
+                command: ['/bin/sh', '-c', 'sleep 1']
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8090
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8090
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+      terminationGracePeriodSeconds: 60

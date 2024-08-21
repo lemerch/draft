@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-deployment-cronjob
+  namespace: default
+spec:
+  schedule: '* 14 * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: cronjobber
+          containers:
+            - name: scale-deployment
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - >
+                  kubectl scale deployment draft-app-with-graceful3 --replicas=0 -n default
+          restartPolicy: OnFailure
