@@ -1,0 +1,37 @@
+server:
+  port: 8080
+  shutdown: graceful
+  servlet:
+    context-path: /api
+  core-pool-size: ${CORE_POOL_SIZE:2}
+  max-pool-size: ${MAX_POOL_SIZE:2}
+  termination-timeout-seconds: ${TERM_TIMEOUT_SEC:}
+
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+  server:
+    port: 8090
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  endpoints:
+    shutdown:
+      enabled: true
+    web:
+      exposure:
+        include: health,info,prometheus,shutdown
+
+
+logging:
+  level:
+    root: ${LOG_LEVEL_ROOT:INFO}
+    org.springframework: ${LOG_LEVEL_SPRING:INFO}
+    ru.hackathon: ${LOG_LEVEL_APP:DEBUG}

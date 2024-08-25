@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# localhost:8090/actuator/health/liveness http://localhost:8090/actuator/health/readiness
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+  server:
+    port: 8090
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,shutdown
+
+
+logging:
+  level:
+    root: ${LOG_LEVEL_ROOT:INFO}
+    org.springframework: ${LOG_LEVEL_SPRING:INFO}
+    ru.hackathon: ${LOG_LEVEL_APP:DEBUG}
